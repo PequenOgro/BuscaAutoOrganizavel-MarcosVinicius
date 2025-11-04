@@ -3,6 +3,8 @@ Arquivo: codigo/c/busca_c.c
 (A flag -lrt é necessária para clock_gettime em algumas versões)
 Para executar: ./busca_c_exec ../../dados/n010000/run_001.csv
 */
+
+
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
