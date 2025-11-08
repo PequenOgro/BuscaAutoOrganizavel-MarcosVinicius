@@ -12,11 +12,10 @@ Para executar: ./busca_c_exec ../../dados/n010000/run_001.csv
 #include <time.h> // Para time() e clock_gettime
 #ifdef _WIN32
 #include <windows.h>
-// Implementação de clock_gettime para Windows usando QueryPerformanceCounter
-// [cite: https://stackoverflow.com/a/5404467]
+
 #define CLOCK_MONOTONIC 1
 int clock_gettime(int clk_id, struct timespec *tp) {
-    (void)clk_id; // Unused parameter
+    (void)clk_id; 
     static LARGE_INTEGER freq;
     static int is_freq_initialized = 0;
     if (!is_freq_initialized) {
@@ -36,7 +35,7 @@ int clock_gettime(int clk_id, struct timespec *tp) {
 int busca_mtf(int *vetor, int n, int chave) {
     for (int i = 0; i < n; i++) {
         if (vetor[i] == chave) {
-            // Item encontrado, agora movemos para o front
+            // Item encontrado, agora move para o front
             int item_encontrado = vetor[i]; // Salva o item
             memmove(&vetor[1], &vetor[0], i * sizeof(int)); // Desloca o bloco de memória
             
@@ -145,14 +144,21 @@ int main(int argc, char *argv[]) {
     clock_gettime(CLOCK_MONOTONIC, &end);
 
     // Calcula o tempo em milissegundos
-    double time_spent_ns = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
-    double time_spent_ms = time_spent_ns / 1e6;
+double time_spent_ns = (end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec);
+double time_spent_ms = time_spent_ns / 1e6;
 
-    // Imprime APENAS o tempo [cite: 164-166]
-    printf("%f\n", time_spent_ms);
+// Imprime no console
+printf("%f\n", time_spent_ms);
 
-    // Libera a memória do vetor
-    free(vetor);
+// Salva em arquivo
+FILE *output_file = fopen("../../resultados/resultados_c.csv", "a");
+if (output_file != NULL) {
+    fprintf(output_file, "%s,%f\n", filepath, time_spent_ms);
+    fclose(output_file);
+}
+
+// Libera a memória do vetor
+free(vetor);
     
     return 0;
 }
